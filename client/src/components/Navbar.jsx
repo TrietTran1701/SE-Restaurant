@@ -65,13 +65,22 @@ const MenuItem = styled.div`
   font-size: 14px;
   cursor: pointer;
   margin-left: 25px;
+  list-style-type: none;
   ${mobile({ fontSize: "12px", marginLeft: "10px" })}
 `;
 
 const Navbar = () => {
   const quantity = useSelector((state) => state.cart.quantity);
+  const user = JSON.parse(localStorage.getItem("persist:root"))?.user;
+  const currentUser = user && JSON.parse(user).currentUser;
+  const username = currentUser?.username;
+  let isLogin = false;
+  if (localStorage.length > 0) isLogin = true;
+  console.log(username);
+  console.log(isLogin);
   return (
     <Container>
+      {localStorage.length > 0 ? (isLogin = true) : (isLogin = false)}
       <Wrapper>
         <Left>
           <Language>EN</Language>
@@ -84,8 +93,13 @@ const Navbar = () => {
           <Logo>KAT.</Logo>
         </Center>
         <Right>
-          <MenuItem>REGISTER</MenuItem>
-          <MenuItem>SIGN IN</MenuItem>
+          <MenuItem>Hello, {username}</MenuItem>
+          <Link to="/login">
+            <MenuItem>LOGIN</MenuItem>
+          </Link>
+          <Link to="/register">
+            <MenuItem>REGISTER</MenuItem>
+          </Link>
           <Link to="/cart">
             <MenuItem>
               <Badge badgeContent={quantity} color="primary">
